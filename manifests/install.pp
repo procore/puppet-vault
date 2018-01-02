@@ -28,15 +28,18 @@ class vault::install {
       }
     }
 
+    'none': {}
+
     default: {
       fail("Installation method ${::vault::install_method} not supported")
     }
   }
 
-  file { $vault_bin:
-    owner => 'root',
-    group => 'root',
-    mode  => '0755',
+  if $::vault::install_method != 'none' {
+    file { $vault_bin:
+      owner => 'root',
+      group => 'root',
+      mode  => '0555',
   }
 
   if !$::vault::disable_mlock {
